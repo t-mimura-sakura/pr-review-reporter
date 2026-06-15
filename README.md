@@ -101,7 +101,7 @@ jobs:
       - self-hosted
       - linux
     container:
-      image: ghcr.io/t-mimura-sakura/pr-review-reporter:1.0.0
+      image: ghcr.io/t-mimura-sakura/pr-review-reporter:1.0.1
     permissions:
       contents: read
       pull-requests: read
