@@ -31,7 +31,6 @@ jobs:
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
-          cache: npm
 
       - name: Bump version
         run: npm version "${{ github.event.inputs.release_type }}" --no-git-tag-version
@@ -53,12 +52,6 @@ jobs:
           git tag "${{ steps.version.outputs.value }}"
           git push origin "${{ steps.version.outputs.value }}"
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
-        with:
-          tag_name: ${{ steps.version.outputs.value }}
-          generate_release_notes: true
-
       - name: Login to GHCR
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         with:
@@ -75,3 +68,9 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ steps.version.outputs.value }}
             ghcr.io/${{ github.repository }}:latest
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          tag_name: ${{ steps.version.outputs.value }}
+          generate_release_notes: true
