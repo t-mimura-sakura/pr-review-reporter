@@ -1,0 +1,16 @@
+{
+  "name": "pr-analyzer-action",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": "24.x",
+    "npm": "^11.10"
+  },
+  "dependencies": {
+    "@actions/core": "^3.0.0",
+    "@octokit/rest": "^22.0.1",
+    "chart.js": "^4.5.1",
+    "chartjs-node-canvas": "^5.0.0",
+    "node-fetch": "^3.3.2"
+  }
+}
