@@ -1,4 +1,4 @@
-# PR Analyzer GitHub Action
+# PR Review Reporter
 
 GitHub Pull Request のレビュー所要時間を分析し、  
 **グラフ（PNG）付きレポートを Slack に投稿する GitHub Action** です。
@@ -96,7 +96,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  analyze:
+  report:
     runs-on: 
       - self-hosted
       - linux
@@ -112,7 +112,7 @@ jobs:
       SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
       DAYS: 7
     steps:
-      - name: Run PR Analyzer
+      - name: Run PR review report
         run: node /bin/index.js
 ```
 
