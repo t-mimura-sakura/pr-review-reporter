@@ -14,7 +14,12 @@ async function main() {
   const token = process.env.GITHUB_TOKEN;
   const slackToken = process.env.SLACK_BOT_TOKEN;
   const slackChannel = process.env.SLACK_CHANNEL_ID;
-
+  const excludedUsers = new Set(
+    (process.env.EXCLUDED_USERS || "")
+      .split(",")
+      .map(u => u.trim())
+      .filter(Boolean)
+  );
   if (!daysRaw || isNaN(days) || days <= 0) {
     throw new Error("DAYS environment variable is required and must be a positive integer.");
   }
@@ -45,8 +50,8 @@ async function main() {
   const prDetails = await loadPRData({ owner, repo, baseUrl, token });
 
   // 分析・ランキング
-  const prResult = await runAnalysis({ prDetails, since, holidays });
-  const rankResult = await runRanking({ prDetails, since });
+  const prResult = await runAnalysis({ prDetails, since, holidays, excludedUsers });
+  const rankResult = await runRanking({ prDetails, since, excludedUsers });
 
   const chartFilename = "pr-chart.png";
   await createPRChart(prResult, chartFilename);
