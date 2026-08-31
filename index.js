@@ -15,8 +15,7 @@ async function main() {
   const slackToken = process.env.SLACK_BOT_TOKEN;
   const slackChannel = process.env.SLACK_CHANNEL_ID;
   const excludedUsers = new Set(
-    (process.env.EXCLUDED_USERS || "")
-      .split(",")
+    ["github-actions[bot]", ...(process.env.EXCLUDED_USERS || "").split(",")]
       .map(u => u.trim())
       .filter(Boolean)
   );

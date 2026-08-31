@@ -7,7 +7,7 @@
  * @param {Set<string>} params.excludedUsers - 除外ユーザーセット
  * @returns {Array<{date: Date, login: string, type: 'comment' | 'approve'}>} イベント配列
  */
-export function extractEvents({ issueComments, reviewComments, reviews, excludedUsers }) {
+export function extractEvents({ issueComments, reviewComments, reviews, excludedUsers = new Set() }) {
   const events = [];
   issueComments
     .filter(c => c.user?.login && !excludedUsers.has(c.user.login))
