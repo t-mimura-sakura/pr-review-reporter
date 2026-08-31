@@ -1,3 +1,5 @@
+import { extractEvents } from "./filter.js";
+
 /**
  * prDetails: prDataLoader.jsで取得したPR詳細配列 [{ pr, issueComments, reviewComments, reviews, detail }]
  * since: Dateオブジェクト（daysで計算済み）
@@ -24,9 +26,10 @@ function businessHoursDiff(start, end, holidays) {
  * @param {Array} params.prDetails - prDataLoader.jsで取得したPR詳細配列
  * @param {Date} params.since - 対象期間の開始日
  * @param {Set<string>} params.holidays - 祝日セット
+ * @param {Set<string>} params.excludedUsers - 除外ユーザーセット
  * @returns {Promise<Array>} 分析結果配列
  */
-export async function runAnalysis({ prDetails, since, holidays }) {
+export async function runAnalysis({ prDetails, since, holidays, excludedUsers }) {
   // holidays: Set (祝日)
   const results = [];
   for (const { pr, issueComments, reviewComments, reviews, detail } of prDetails) {
@@ -34,13 +37,9 @@ export async function runAnalysis({ prDetails, since, holidays }) {
     if (created < since) continue;
 
     // ---- first feedback (comment or approve)
-    const feedbackTimes = [];
-    issueComments.forEach(c => feedbackTimes.push(new Date(c.created_at)));
-    reviewComments.forEach(c => feedbackTimes.push(new Date(c.created_at)));
-    const approveTimes = reviews
-      .filter(r => r.state === "APPROVED")
-      .map(r => new Date(r.submitted_at));
-    feedbackTimes.push(...approveTimes);
+    const events = extractEvents({ issueComments, reviewComments, reviews, excludedUsers });
+    const feedbackTimes = events.map(e => e.date);
+    const approveTimes = events.filter(e => e.type === "approve").map(e => e.date);
 
     const firstFeedbackAt =
       feedbackTimes.length > 0

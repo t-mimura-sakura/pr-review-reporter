@@ -126,6 +126,7 @@ jobs:
 | SLACK_BOT_TOKEN | Slack Bot Token（xoxb-...）|
 | SLACK_CHANNEL_ID | 投稿先 Slack チャンネルの ID |
 | DAYS | 何日前までの PR を対象にするか（例: 7）|
+| EXCLUDED_USERS | 集計から除外する GitHub ユーザー名（カンマ区切り、例: `dependabot[bot],foo-bot`）。`github-actions[bot]` は常に自動で除外されます。|
 
 すべてのパラメータは環境変数で指定します。
 
